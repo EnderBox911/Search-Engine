@@ -40,12 +40,14 @@ def run_search(query):
   results = search(query)
   fi = Filter(results)
 
-  results = fi.filter()
+  filtered = fi.filter()
   
   rendered = search_template
   # Makes sure the html doesn't render the snipper
-  results["snippet"] = results["snippet"].apply(lambda x: html.escape(x))
-  for index, row in results.iterrows():
+  print(filtered)
+  print(filtered["snippet"])
+  filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
+  for index, row in filtered.iterrows():
     rendered += result_template.format(**row)
 
   return rendered

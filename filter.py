@@ -3,19 +3,18 @@ from urllib.parse import urlparse
 from settings import *
 import urllib
 
-def get_page_content(row):
-  # Only get the text from a html
-  soup = BeautifulSoup(row["html"])
-  text = soup.get_text()
-  return text
-
-
 with open("blacklist.txt") as f:
   bad_domain_list = set(f.read().split("\n"))
 
 
+def get_page_content(row):
+  # Only get the text from a html
+  soup = BeautifulSoup(row["html"], features="html5lib")
+  text = soup.get_text()
+  return text
+
 def tracker_urls(row):
-  soup = BeautifulSoup(row["html"])
+  soup = BeautifulSoup(row["html"], features="html5lib")
   # Finds everything that has the script tag
   scripts = soup.find_all("script", {"src": True})
   srcs = [s.get("src") for s in scripts]
@@ -34,7 +33,7 @@ def tracker_urls(row):
 
 class Filter():
   def __init__(self, results):
-    self.filtered = results.copy
+    self.filtered = results.copy()
 
   def content_filter(self):
     # Gets page content for each row of the filtered data frame

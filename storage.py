@@ -8,6 +8,7 @@ class DBStorage():
   def __init__(self):
     # Data base connection to the db
     self.con = sqlite3.connect("links.db")
+    self.setup_tables()
 
   # Create a table in the data base
   def setup_tables(self):
