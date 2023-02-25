@@ -22,7 +22,7 @@ def tracker_urls(row):
 
   # Finds everything that has the link tag
   links = soup.find_all("a", {"href": True})
-  href = [s.get("href") for l in links]
+  href = [l.get("href") for l in links]
 
   # Parses it and leaves just the root domain that the src or link is pointig to
   all_domains = [urlparse(s).hostname for s in srcs + href]
