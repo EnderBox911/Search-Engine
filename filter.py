@@ -10,10 +10,8 @@ def get_page_content(row):
   return text
 
 
-#link = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt"
-#f = urllib.request.urlopen(link)
-#bad_domain_list = set(f.read().split("\n"))
-#print(bad_domain_list)
+with open("blacklist.txt") as f:
+  bad_domain_list = set(f.read().split("\n"))
 
 
 def tracker_urls(row):
@@ -30,6 +28,8 @@ def tracker_urls(row):
   all_domains = [urlparse(s).hostname for s in srcs + href]
 
   bad_domains = [a for a in all_domains if a in bad_domain_list]
+  
+  return len(bad_domains)
   
 
 class Filter():
@@ -49,11 +49,14 @@ class Filter():
     self.filtered["rank"] += word_count
 
   def tracker_filter(self):
-    tracker_count = self.filtered.apply(tracker_urls, axis=1)
+    tracker_count = self.filtered.apply(tracker_urls, axis=1)  
+    tracker_count[tracker_count > tracker_count.median()] = RESULT_COUNT * 2
+    self.filtered["rank"] += tracker_count
 
   def filter(self):
     # Resorts the filtered dataframe by ranking
     self.content_filter()
+    self.tracker_filter()
     self.filtered = self.filtered.sort_values("rank", ascending=True)
     self.filtered["rank"] = self.filtered["rank"].round()
     return self.filtered
