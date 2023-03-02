@@ -98,7 +98,7 @@ class Filter():
   def filter(self):
     # Resorts the filtered dataframe by ranking
     self.content_filter()
-    #self.tracker_filter()
+    self.tracker_filter()
     self.filtered = self.filtered.sort_values("rank", ascending=True)
     self.filtered["rank"] = self.filtered["rank"].round()
     return self.filtered
