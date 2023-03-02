@@ -44,8 +44,8 @@ def run_search(query):
   
   rendered = search_template
   # Makes sure the html doesn't render the snipper
-  print(filtered)
-  print(filtered["snippet"])
+  #print(filtered)
+  #print(filtered["snippet"])
   filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
   for index, row in filtered.iterrows():
     rendered += result_template.format(**row)
